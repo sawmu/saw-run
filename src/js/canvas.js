@@ -77,19 +77,37 @@ class GenericObject {
   }
 }
 
-function createImage(){}
-const image = new Image()
-image.src = platform
+function createImage(imageSrc){
+    const image = new Image()
+    image.src = imageSrc
+    return image;
+}
+
+const platformImage = createImage(platform)
 
 
 
 const player = new Player();
-const platforms = [new Platform({ x: -1, y: 470, image }), new Platform({ x: image.width - 2 , y: 470, image})]
-const genericObjects = [new GenericObject({
-  x: -1,
-  y: 470,
-  image
-})]
+const platforms = [
+    new Platform({
+        x: -1,
+        y: 470, 
+        image: platformImage 
+    }), 
+    new Platform({ x: platformImage.width - 2 , y: 470, image: platformImage})]
+const genericObjects = [
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image: createImage(background)
+    }),
+
+    new GenericObject({
+        x: -1,
+        y: -1,
+        image: createImage(hills)
+    })
+]
 const keys = {
     right: {
         pressed: false
@@ -106,6 +124,9 @@ function animate() {
     requestAnimationFrame(animate)
     c.fillStyle = '#fff';
     c.fillRect(0, 0, innerWidth, innerHeight)
+    genericObjects.forEach(genericObject => {
+        genericObject.draw()
+    })
    
     platforms.forEach(platform => {
         platform.draw()
